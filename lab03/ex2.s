@@ -21,28 +21,28 @@ dest:
 
 .text
 main:
-    addi t0, x0, 0
-    addi s0, x0, 0
-    la s1, source
-    la s2, dest
+    addi t0, x0, 0 # t0 = 0
+    addi s0, x0, 0 # s0 = 0 s0 -> sum
+    la s1, source # s1 = M[source]
+    la s2, dest # s2 = M[dest]
 loop:
-    slli s3, t0, 2
-    add t1, s1, s3
-    lw t2, 0(t1)
-    beq t2, x0, exit
-    add a0, x0, t2
+    slli s3, t0, 2 # s3 = t0 << 2, s3 save the offset of array
+    add t1, s1, s3 # t1 = s1
+    lw t2, 0(t1) # load the kth elemnt in source to t2
+    beq t2, x0, exit # if t2 == 0, exit
+    add a0, x0, t2 # put t2 into parameter
     addi sp, sp, -8
-    sw t0, 0(sp)
-    sw t2, 4(sp)
+    sw t0, 0(sp) # save k
+    sw t2, 4(sp) # save source[k]
     jal square
-    lw t0, 0(sp)
+    lw t0, 0(sp) 
     lw t2, 4(sp)
     addi sp, sp, 8
-    add t2, x0, a0
-    add t3, s2, s3
-    sw t2, 0(t3)
-    add s0, s0, t2
-    addi t0, t0, 1
+    add t2, x0, a0 # t2 -> dest[k]
+    add t3, s2, s3 # t3 -> dest
+    sw t2, 0(t3) # load the kth element in t3
+    add s0, s0, t2 # s0 += t2
+    addi t0, t0, 1 # t0 + 1
     jal x0, loop
 square:
     add t0, a0, x0
